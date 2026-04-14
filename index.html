@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dugg — Open-Source MCP Knowledge Network</title>
+  <meta name="description" content="Agentic-first shared knowledge base. Agents process, Dugg stores, everyone queries. Open source, MIT licensed." />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://dugg.fyi" />
+  <meta property="og:title" content="Dugg — Open-Source MCP Knowledge Network" />
+  <meta property="og:description" content="Agentic-first shared knowledge base. Agents process, Dugg stores, everyone queries." />
+  <meta property="og:image" content="https://dugg.fyi/og-image.png" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Dugg — Open-Source MCP Knowledge Network" />
+  <meta name="twitter:description" content="Agentic-first shared knowledge base. Agents process, Dugg stores, everyone queries." />
+  <meta name="twitter:image" content="https://dugg.fyi/og-image.png" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,700&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Reset & Base ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #5C94FC;
+      color: #1A1A1A;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ─── Design Tokens ────────────────────────────────────────────────── */
+    :root {
+      --sky:        #5C94FC;
+      --grass:      #30B020;
+      --topsoil:    #C8A060;
+      --midearth:   #906030;
+      --deepearth:  #604020;
+      --darkearth:  #4A3020;
+      --bedrock:    #383838;
+      --tunnel:     #D8B878;
+      --text-above: #1A1A1A;
+      --text-below: #F0E8D8;
+      --gold:       #F8D830;
+      --crystal:    #30D8F8;
+      --purple:     #C870F8;
+    }
+
+    /* ─── NAV ──────────────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 40px;
+      background: rgba(92, 148, 252, 0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 2px solid rgba(255,255,255,0.2);
+    }
+    .nav-wordmark {
+      font-size: 1.75rem;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -0.5px;
+      text-shadow: 2px 3px 0 rgba(0,0,0,0.15);
+    }
+    .nav-wordmark span {
+      color: #fff;
+    }
+    .nav-github {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+      padding: 8px 18px;
+      border: 2px solid rgba(255,255,255,0.7);
+      border-radius: 999px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .nav-github:hover {
+      background: #fff;
+      color: var(--sky);
+    }
+
+    /* ─── SECTION BASE ─────────────────────────────────────────────────── */
+    section {
+      position: relative;
+      width: 100%;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ─── CLOUDS ───────────────────────────────────────────────────────── */
+    .clouds {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .cloud {
+      position: absolute;
+      background: #fff;
+      border-radius: 999px;
+      opacity: 0.92;
+    }
+    .cloud::before, .cloud::after {
+      content: '';
+      position: absolute;
+      background: #fff;
+      border-radius: 999px;
+    }
+    /* Cloud 1 */
+    .cloud-1 { width: 120px; height: 44px; top: 18%; left: 8%; }
+    .cloud-1::before { width: 80px; height: 60px; top: -28px; left: 16px; }
+    .cloud-1::after  { width: 60px; height: 50px; top: -22px; left: 54px; }
+    /* Cloud 2 */
+    .cloud-2 { width: 160px; height: 52px; top: 12%; left: 55%; }
+    .cloud-2::before { width: 100px; height: 72px; top: -32px; left: 20px; }
+    .cloud-2::after  { width: 80px;  height: 64px; top: -26px; left: 72px; }
+    /* Cloud 3 — removed: competed with hero copy */
+    .cloud-3 { display: none; }
+    /* Cloud 4 */
+    .cloud-4 { width: 100px; height: 38px; top: 26%; right: 14%; opacity: 0.8; }
+    .cloud-4::before { width: 70px; height: 56px; top: -24px; left: 12px; }
+    .cloud-4::after  { width: 54px; height: 48px; top: -20px; left: 48px; }
+
+    /* ─── SECTION 1: HERO ──────────────────────────────────────────────── */
+    #hero {
+      min-height: auto;
+      background: var(--sky);
+      display: flex;
+      flex-direction: column;
+      padding-top: 64px;
+    }
+    .hero-body {
+      flex: 0;
+      display: flex;
+      align-items: flex-start;
+      padding: 60px 24px 0;
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+      gap: 48px;
+    }
+    .hero-copy {
+      flex: 1;
+      min-width: 0;
+      position: relative;
+      z-index: 5;
+    }
+    .hero-display {
+      font-size: 55px;
+      font-weight: 900;
+      line-height: 1.08;
+      color: #fff;
+      text-shadow: 3px 4px 0 rgba(0,0,0,0.12);
+      margin-bottom: 28px;
+    }
+    .hero-display .line-2,
+    .hero-display .line-3 {
+      display: block;
+      color: #fff;
+    }
+    .hero-tagline {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 36px;
+      line-height: 1.5;
+      max-width: 480px;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--gold);
+      color: #1A1A1A;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      padding: 14px 28px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #C8A800, 0 6px 16px rgba(0,0,0,0.18);
+      transition: transform 0.12s, box-shadow 0.12s;
+      text-decoration: none;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #C8A800, 0 10px 24px rgba(0,0,0,0.22);
+    }
+    .btn-primary:active {
+      transform: translateY(1px);
+      box-shadow: 0 2px 0 #C8A800, 0 4px 8px rgba(0,0,0,0.18);
+    }
+    .hero-mascot {
+      flex: 0 0 340px;
+      width: 340px;
+      position: relative;
+      align-self: flex-end;
+      z-index: 3;
+    }
+    /* Hill / mesa — positioned to sit on top of and merge with the grass strip */
+    .hero-hill {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: -72px; /* sink into the ground strip so hill base merges with grass */
+    }
+    .hero-hill .placeholder-box.hero-ph {
+      position: relative;
+      z-index: 4;
+      margin-bottom: -60px; /* overlap into the hill */
+    }
+    .duggley-video {
+      position: relative;
+      z-index: 4;
+      width: 260px;
+      height: 260px;
+      margin-bottom: -100px; /* sink into the hill mound */
+      object-fit: contain;
+      pointer-events: none;
+    }
+    .hill-mound {
+      width: 420px;
+      height: 160px;
+      background: var(--grass);
+      border-radius: 50% 50% 0 0;
+      position: relative;
+      z-index: 2;
+    }
+    /* Dirt layer visible at the base of the hill — connects to the ground */
+    .hill-mound::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: var(--topsoil);
+      border-radius: 0;
+    }
+    /* Hill grass blades removed per feedback */
+    /* Hole in the hill where Duggley emerges */
+    .hill-hole {
+      width: 120px;
+      height: 50px;
+      background: #3A2510;
+      border-radius: 50%;
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      box-shadow: inset 0 8px 16px rgba(0,0,0,0.5);
+    }
+    .placeholder-box {
+      border: 3px dashed rgba(255,255,255,0.5);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 0.02em;
+      text-align: center;
+      background: rgba(255,255,255,0.08);
+    }
+    .placeholder-box.hero-ph {
+      width: 300px;
+      height: 400px;
+    }
+    /* ─ Ground strip ─ */
+    .ground-strip {
+      margin-top: 0;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+      background: var(--topsoil); /* fill any gap with topsoil, not sky */
+    }
+    .grass-layer {
+      height: 48px;
+      background: var(--grass);
+      position: relative;
+    }
+    /* Grass blades via clip-path */
+    .grass-layer::before {
+      content: '';
+      position: absolute;
+      top: -14px; left: 0; right: 0;
+      height: 20px;
+      background: var(--grass);
+      clip-path: polygon(
+        0% 100%, 1.5% 0%, 3% 100%, 4.5% 0%, 6% 100%,
+        7.5% 0%, 9% 100%, 10.5% 0%, 12% 100%, 13.5% 0%,
+        15% 100%, 16.5% 0%, 18% 100%, 19.5% 0%, 21% 100%,
+        22.5% 0%, 24% 100%, 25.5% 0%, 27% 100%, 28.5% 0%,
+        30% 100%, 31.5% 0%, 33% 100%, 34.5% 0%, 36% 100%,
+        37.5% 0%, 39% 100%, 40.5% 0%, 42% 100%, 43.5% 0%,
+        45% 100%, 46.5% 0%, 48% 100%, 49.5% 0%, 51% 100%,
+        52.5% 0%, 54% 100%, 55.5% 0%, 57% 100%, 58.5% 0%,
+        60% 100%, 61.5% 0%, 63% 100%, 64.5% 0%, 66% 100%,
+        67.5% 0%, 69% 100%, 70.5% 0%, 72% 100%, 73.5% 0%,
+        75% 100%, 76.5% 0%, 78% 100%, 79.5% 0%, 81% 100%,
+        82.5% 0%, 84% 100%, 85.5% 0%, 87% 100%, 88.5% 0%,
+        90% 100%, 91.5% 0%, 93% 100%, 94.5% 0%, 96% 100%,
+        97.5% 0%, 99% 100%, 100% 0%, 100% 100%
+      );
+    }
+    .topsoil-peek {
+      height: 24px;
+      background: var(--topsoil);
+    }
+    /* ─ Scroll indicator ─ */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 108px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255,255,255,0.6);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      animation: bounce 2s ease-in-out infinite;
+    }
+    .scroll-arrow {
+      width: 20px;
+      height: 20px;
+      border-right: 3px solid rgba(255,255,255,0.5);
+      border-bottom: 3px solid rgba(255,255,255,0.5);
+      transform: rotate(45deg);
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ─── ROOTS DECORATION ─────────────────────────────────────────────── */
+    .roots {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 80px;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .root {
+      position: absolute;
+      top: 0;
+      width: 3px;
+      background: linear-gradient(to bottom, #8B6040, transparent);
+      border-radius: 0 0 4px 4px;
+      transform-origin: top center;
+    }
+    .root::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 10px; height: 10px;
+      background: #7A5030;
+      border-radius: 50%;
+    }
+
+    /* ─── SECTION 2: PROBLEM ───────────────────────────────────────────── */
+    #problem {
+      background: var(--topsoil);
+      padding: 80px 24px 80px;
+      position: relative;
+    }
+    #problem .roots .root:nth-child(1) { left: 8%;  height: 52px; }
+    #problem .roots .root:nth-child(2) { left: 18%; height: 38px; }
+    #problem .roots .root:nth-child(3) { left: 33%; height: 64px; }
+    #problem .roots .root:nth-child(4) { left: 47%; height: 44px; }
+    #problem .roots .root:nth-child(5) { left: 61%; height: 58px; }
+    #problem .roots .root:nth-child(6) { left: 74%; height: 36px; }
+    #problem .roots .root:nth-child(7) { left: 88%; height: 50px; }
+    .tunnel-chamber {
+      max-width: 720px;
+      margin: 0 auto;
+      background: var(--tunnel);
+      border-radius: 28px;
+      padding: 48px 52px;
+      box-shadow:
+        inset 0 4px 16px rgba(0,0,0,0.12),
+        0 8px 32px rgba(0,0,0,0.15);
+      position: relative;
+    }
+    .tunnel-chamber p {
+      font-size: 1.05rem;
+      font-weight: 600;
+      line-height: 1.7;
+      color: #3A2010;
+      margin-bottom: 18px;
+    }
+    .tunnel-chamber p:last-of-type { margin-bottom: 0; }
+    .pull-quote {
+      margin: 28px 0;
+      padding: 16px 24px;
+      border-left: 5px solid var(--gold);
+      background: rgba(248, 216, 48, 0.12);
+      border-radius: 0 12px 12px 0;
+      position: relative;
+      z-index: 2;
+    }
+    .pull-quote p {
+      font-size: 1.15rem !important;
+      font-style: italic;
+      font-weight: 700 !important;
+      color: #3A2010 !important;
+      margin-bottom: 0 !important;
+    }
+    .placeholder-corner {
+      position: absolute;
+      bottom: 12px;
+      right: 16px;
+      width: 90px;
+      height: 90px;
+    }
+    .placeholder-corner img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* ─── SECTION 3: HOW IT WORKS ──────────────────────────────────────── */
+    #how {
+      background: var(--midearth);
+      padding: 80px 24px 80px;
+      position: relative;
+    }
+    #how .roots .root:nth-child(1) { left: 12%;  height: 44px; background: linear-gradient(to bottom, #704820, transparent); }
+    #how .roots .root:nth-child(2) { left: 28%;  height: 60px; background: linear-gradient(to bottom, #704820, transparent); }
+    #how .roots .root:nth-child(3) { left: 52%;  height: 38px; background: linear-gradient(to bottom, #704820, transparent); }
+    #how .roots .root:nth-child(4) { left: 70%;  height: 52px; background: linear-gradient(to bottom, #704820, transparent); }
+    #how .roots .root:nth-child(5) { left: 86%;  height: 42px; background: linear-gradient(to bottom, #704820, transparent); }
+    .section-header {
+      text-align: center;
+      margin-bottom: 52px;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 900;
+      color: var(--text-below);
+      text-shadow: 2px 3px 0 rgba(0,0,0,0.2);
+      margin-bottom: 10px;
+    }
+    .section-subtitle {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: rgba(240,232,216,0.75);
+    }
+    .cards-row {
+      display: flex;
+      gap: 0;
+      align-items: stretch;
+      max-width: 960px;
+      margin: 0 auto;
+      position: relative;
+    }
+    /* Tunnel connector between cards */
+    .cards-row::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: calc(33.3% - 2px);
+      right: calc(33.3% - 2px);
+      height: 8px;
+      background: rgba(0,0,0,0.25);
+      border-radius: 4px;
+      transform: translateY(-50%);
+      z-index: 0;
+    }
+    .how-card {
+      flex: 1;
+      background: var(--tunnel);
+      border-radius: 20px;
+      padding: 36px 28px;
+      text-align: center;
+      box-shadow:
+        inset 0 4px 14px rgba(0,0,0,0.1),
+        0 6px 24px rgba(0,0,0,0.2);
+      position: relative;
+      z-index: 1;
+      margin: 0 12px;
+      transition: transform 0.2s;
+    }
+    .how-card:hover { transform: translateY(-4px); }
+    .how-card-icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 16px;
+      background: var(--midearth);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      box-shadow: inset 0 3px 8px rgba(0,0,0,0.25), 0 2px 4px rgba(0,0,0,0.15);
+    }
+    .how-card-step {
+      font-size: 0.7rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--midearth);
+      margin-bottom: 8px;
+    }
+    .how-card h3 {
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: #3A2010;
+      margin-bottom: 10px;
+    }
+    .how-card p {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #5A3820;
+      line-height: 1.55;
+    }
+    .how-footer {
+      text-align: center;
+      margin-top: 44px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: rgba(240,232,216,0.82);
+      font-style: italic;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ─── SECTION 4: TIERS ─────────────────────────────────────────────── */
+    #tiers {
+      background: var(--deepearth);
+      padding: 80px 24px 80px;
+      position: relative;
+    }
+    #tiers .roots .root:nth-child(1) { left: 15%;  height: 40px; background: linear-gradient(to bottom, #503018, transparent); }
+    #tiers .roots .root:nth-child(2) { left: 40%;  height: 56px; background: linear-gradient(to bottom, #503018, transparent); }
+    #tiers .roots .root:nth-child(3) { left: 65%;  height: 34px; background: linear-gradient(to bottom, #503018, transparent); }
+    #tiers .roots .root:nth-child(4) { left: 82%;  height: 48px; background: linear-gradient(to bottom, #503018, transparent); }
+    .tiers-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+    }
+    /* Vertical tunnel connector */
+    .tiers-stack::before {
+      content: '';
+      position: absolute;
+      top: 60px;
+      bottom: 60px;
+      left: 50%;
+      width: 8px;
+      background: rgba(0,0,0,0.25);
+      border-radius: 4px;
+      transform: translateX(-50%);
+      z-index: 0;
+    }
+    .tier-card {
+      background: var(--tunnel);
+      border-radius: 20px;
+      padding: 32px 40px;
+      box-shadow:
+        inset 0 4px 14px rgba(0,0,0,0.12),
+        0 6px 24px rgba(0,0,0,0.22);
+      position: relative;
+      z-index: 1;
+      margin: 12px 0;
+      transition: transform 0.2s;
+    }
+    .tier-card:hover { transform: translateX(4px); }
+    /* Progressively wider */
+    .tier-card:nth-child(1) { width: min(480px, 100%); }
+    .tier-card:nth-child(2) { width: min(580px, 100%); }
+    .tier-card:nth-child(3) { width: min(680px, 100%); }
+    .tier-label {
+      font-size: 0.7rem;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--deepearth);
+      background: var(--gold);
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+    .tier-card h3 {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: #3A2010;
+      margin-bottom: 8px;
+    }
+    .tier-card p {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #5A3820;
+      line-height: 1.55;
+    }
+    .tier-placeholder {
+      position: absolute;
+      right: -88px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 72px;
+      height: 72px;
+      border-radius: 10px;
+      overflow: hidden;
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    /* ─── SECTION 5: MCP / TERMINAL ────────────────────────────────────── */
+    #mcp {
+      background: var(--deepearth);
+      padding: 80px 24px 80px;
+      position: relative;
+    }
+    /* Gem dots */
+    .gems {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .gem {
+      position: absolute;
+      border-radius: 50%;
+    }
+    #mcp .gem:nth-child(1)  { width: 14px; height: 14px; background: var(--gold);    top: 15%; left: 7%;  opacity: 0.7; }
+    #mcp .gem:nth-child(2)  { width: 10px; height: 10px; background: var(--crystal); top: 38%; left: 4%;  opacity: 0.6; }
+    #mcp .gem:nth-child(3)  { width: 8px;  height: 8px;  background: var(--gold);    top: 62%; left: 9%;  opacity: 0.5; }
+    #mcp .gem:nth-child(4)  { width: 12px; height: 12px; background: var(--crystal); top: 22%; right: 8%; opacity: 0.65; }
+    #mcp .gem:nth-child(5)  { width: 9px;  height: 9px;  background: var(--gold);    top: 55%; right: 5%; opacity: 0.55; }
+    #mcp .gem:nth-child(6)  { width: 6px;  height: 6px;  background: var(--purple);  top: 78%; right: 12%;opacity: 0.5; }
+    .mcp-content {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      gap: 48px;
+      align-items: center;
+    }
+    .mcp-text { flex: 1; min-width: 0; }
+    .mcp-text h2 {
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 900;
+      color: var(--text-below);
+      text-shadow: 2px 3px 0 rgba(0,0,0,0.2);
+      margin-bottom: 16px;
+    }
+    .mcp-text p {
+      font-size: 1rem;
+      font-weight: 600;
+      color: rgba(240,232,216,0.82);
+      line-height: 1.65;
+      margin-bottom: 12px;
+    }
+    .mcp-text .stat-line {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--gold);
+      letter-spacing: 0.02em;
+    }
+    .terminal {
+      flex: 1;
+      min-width: 0;
+      background: #1E1E1E;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.08),
+        0 8px 32px rgba(0,0,0,0.45),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .terminal-bar {
+      background: #2A2A2A;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .terminal-dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+    }
+    .terminal-dot:nth-child(1) { background: #FF5F57; }
+    .terminal-dot:nth-child(2) { background: #FFBD2E; }
+    .terminal-dot:nth-child(3) { background: #28C840; }
+    .terminal-body {
+      padding: 20px 20px 24px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.85rem;
+      line-height: 1.9;
+      color: #D4D4D4;
+    }
+    .terminal-body .cmd  { color: #CE9178; }
+    .terminal-body .out  { color: #9CDCFE; padding-left: 0; }
+    .terminal-body .link { color: #4EC9B0; }
+    .mcp-placeholder {
+      margin-top: 16px;
+      width: 80px;
+      height: 64px;
+      overflow: hidden;
+    }
+
+    /* ─── SECTION 6: PRIVACY ───────────────────────────────────────────── */
+    #privacy {
+      background: #4A3020;
+      padding: 100px 24px;
+      position: relative;
+    }
+    .privacy-inner {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .privacy-inner h2 {
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 900;
+      color: var(--text-below);
+      line-height: 1.2;
+      margin-bottom: 36px;
+      text-shadow: 2px 3px 0 rgba(0,0,0,0.2);
+    }
+    .privacy-inner p {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: rgba(240,232,216,0.78);
+      line-height: 1.7;
+      margin-bottom: 18px;
+    }
+    .privacy-inner p:last-child { margin-bottom: 0; }
+    /* Horizontal rule accent */
+    .privacy-rule {
+      width: 48px;
+      height: 3px;
+      background: rgba(240,232,216,0.2);
+      border-radius: 999px;
+      margin: 0 auto 36px;
+    }
+
+    /* ─── SECTION 7: FOOTER / CTA ──────────────────────────────────────── */
+    #footer {
+      background: var(--bedrock);
+      padding: 80px 24px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Bedrock texture via subtle stripe */
+    #footer::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 18px,
+        rgba(255,255,255,0.015) 18px,
+        rgba(255,255,255,0.015) 20px
+      );
+      pointer-events: none;
+    }
+    /* Gem accents in footer */
+    #footer .gem:nth-child(1)  { width: 18px; height: 18px; background: var(--gold);    top: 12%; left: 5%;   opacity: 0.8; animation: twinkle 3.1s ease-in-out infinite; }
+    #footer .gem:nth-child(2)  { width: 12px; height: 12px; background: var(--crystal); top: 30%; left: 11%;  opacity: 0.7; animation: twinkle 2.4s ease-in-out infinite 0.5s; }
+    #footer .gem:nth-child(3)  { width: 22px; height: 22px; background: var(--gold);    top: 55%; left: 3%;   opacity: 0.65; animation: twinkle 3.8s ease-in-out infinite 1s; }
+    #footer .gem:nth-child(4)  { width: 10px; height: 10px; background: var(--purple);  top: 72%; left: 16%;  opacity: 0.6; animation: twinkle 2.7s ease-in-out infinite 0.3s; }
+    #footer .gem:nth-child(5)  { width: 16px; height: 16px; background: var(--crystal); top: 18%; right: 7%;  opacity: 0.75; animation: twinkle 3.4s ease-in-out infinite 0.8s; }
+    #footer .gem:nth-child(6)  { width: 20px; height: 20px; background: var(--gold);    top: 42%; right: 4%;  opacity: 0.7; animation: twinkle 2.9s ease-in-out infinite 0.2s; }
+    #footer .gem:nth-child(7)  { width: 8px;  height: 8px;  background: var(--purple);  top: 65%; right: 13%; opacity: 0.55; animation: twinkle 3.2s ease-in-out infinite 1.2s; }
+    #footer .gem:nth-child(8)  { width: 14px; height: 14px; background: var(--crystal); top: 80%; right: 6%;  opacity: 0.65; animation: twinkle 4s ease-in-out infinite 0.6s; }
+    /* Diamond shape gems */
+    .gem-diamond {
+      border-radius: 3px;
+      transform: rotate(45deg);
+    }
+    #footer .gem:nth-child(3)  { border-radius: 3px; transform: rotate(45deg); }
+    #footer .gem:nth-child(6)  { border-radius: 3px; transform: rotate(45deg); }
+    @keyframes twinkle {
+      0%, 100% { opacity: var(--base-opacity, 0.7); transform: scale(1) rotate(0deg); }
+      50%       { opacity: 1; transform: scale(1.15) rotate(10deg); }
+    }
+    .footer-inner {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .footer-cta {
+      font-size: clamp(2rem, 5vw, 3.6rem);
+      font-weight: 900;
+      color: var(--text-below);
+      line-height: 1.1;
+      margin-bottom: 20px;
+      text-shadow: 3px 4px 0 rgba(0,0,0,0.3);
+    }
+    .footer-cta span {
+      color: var(--gold);
+    }
+    .footer-stats {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: rgba(240,232,216,0.55);
+      letter-spacing: 0.04em;
+      margin-bottom: 36px;
+    }
+    .footer-stats span {
+      color: rgba(240,232,216,0.75);
+    }
+    .footer-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--gold);
+      color: #1A1A1A;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 800;
+      padding: 15px 34px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #C8A800, 0 6px 20px rgba(248,216,48,0.3);
+      transition: transform 0.12s, box-shadow 0.12s;
+      margin-bottom: 44px;
+    }
+    .footer-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #C8A800, 0 10px 28px rgba(248,216,48,0.4);
+    }
+    .footer-mascot-ph {
+      width: 200px;
+      height: 260px;
+      margin: 0 auto 40px;
+      overflow: hidden;
+      text-align: center;
+    }
+    .footer-sub {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: rgba(240,232,216,0.35);
+      letter-spacing: 0.04em;
+    }
+    .footer-sub a:hover { color: rgba(240,232,216,0.6); text-decoration: underline; }
+
+    /* ─── FADE-IN ANIMATION (IntersectionObserver) ─────────────────────── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── RESPONSIVE ───────────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      nav { padding: 14px 20px; }
+      .nav-wordmark { font-size: 1.4rem; }
+
+      .hero-body {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 48px 20px 0;
+        gap: 32px;
+      }
+      .hero-mascot { flex: none; width: 100%; }
+      .placeholder-box.hero-ph { width: 100%; height: 260px; }
+      .hill-mound { width: 100%; max-width: 340px; margin: 0 auto; }
+      .hero-hill { width: 100%; }
+
+      .tunnel-chamber { padding: 32px 24px; }
+
+      .cards-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+      }
+      .cards-row::before { display: none; }
+      .how-card { margin: 0; width: 100%; max-width: 380px; }
+
+      .tier-card:nth-child(1),
+      .tier-card:nth-child(2),
+      .tier-card:nth-child(3) { width: 100%; }
+      .tier-placeholder { display: none; }
+
+      .mcp-content { flex-direction: column; }
+
+      #footer .gem { display: none; }
+    }
+
+    @media (max-width: 480px) {
+      .section-title { font-size: 1.6rem; }
+      .hero-display  { font-size: 2.2rem; }
+      .footer-cta    { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── NAV ─────────────────────────────────────────────────────────── -->
+  <nav>
+    <div class="nav-wordmark">du<span>gg</span></div>
+    <a href="https://github.com/kadedworkin/dugg-fyi" class="nav-github" target="_blank" rel="noopener">GitHub ↗</a>
+  </nav>
+
+  <!-- ─── SECTION 1: HERO ──────────────────────────────────────────────── -->
+  <section id="hero">
+    <div class="clouds" aria-hidden="true">
+      <div class="cloud cloud-1"></div>
+      <div class="cloud cloud-2"></div>
+      <div class="cloud cloud-3"></div>
+      <div class="cloud cloud-4"></div>
+    </div>
+
+    <div class="hero-body">
+      <div class="hero-copy">
+        <h1 class="hero-display">
+          You dig.<br>
+          <span class="line-2">Your agents dig.</span>
+          <span class="line-3">Your friends' agents dig.</span>
+        </h1>
+        <p class="hero-tagline">Shared knowledge. Sharper agents. Better answers.</p>
+        <a href="https://github.com/kadedworkin/dugg-fyi" class="btn-primary" target="_blank" rel="noopener">
+          View on GitHub &rarr;
+        </a>
+      </div>
+      <div class="hero-mascot">
+        <div class="hero-hill">
+          <video class="duggley-video" autoplay loop muted playsinline aria-label="Duggley the mole mascot popping out of a grassy hill" role="img">
+            <source src="duggley-alpha.mov" type="video/quicktime">
+            <source src="duggley-alpha.webm" type="video/webm">
+          </video>
+          <div class="hill-mound">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-indicator" aria-hidden="true">
+      <span>scroll</span>
+      <div class="scroll-arrow"></div>
+    </div>
+
+    <div class="ground-strip">
+      <div class="grass-layer"></div>
+      <div class="topsoil-peek"></div>
+    </div>
+  </section>
+
+  <!-- ─── SECTION 2: PROBLEM ───────────────────────────────────────────── -->
+  <section id="problem">
+    <div class="roots" aria-hidden="true">
+      <div class="root"></div>
+      <div class="root"></div>
+      <div class="root"></div>
+      <div class="root"></div>
+      <div class="root"></div>
+      <div class="root"></div>
+      <div class="root"></div>
+    </div>
+
+    <div class="container" style="padding-top: 56px;">
+      <div class="tunnel-chamber fade-in">
+        <p>You'll never read every link, email newsletter, or watch every video or clip your friends and coworkers send you. And with AI accelerating everything, it's only getting more chaotic.</p>
+        <p><strong>Thankfully, now you don't have to.</strong></p>
+        <p>Your agents learn from every resource that flows through — articles, videos, transcripts, notes — so the right one surfaces when you need it.</p>
+        <p>And if your friends (or their agents) leave notes? Yours learns from that too.</p>
+        <div class="pull-quote">
+          <p>"The more people dig, the smarter everyone's agents get."</p>
+        </div>
+        <div class="placeholder-corner"><img src="duggley-tail.png" alt="Duggley the mole digging away from the camera, tail visible"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SECTION 3: HOW IT WORKS ──────────────────────────────────────── -->
+  <section id="how">
+    <div class="roots" aria-hidden="true">
+      <div class="root"></div>
+      <div class="root"></div>
+      <div class="root"></div>
+      <div class="root"></div>
+      <div class="root"></div>
+    </div>
+
+    <div class="container" style="padding-top: 56px;">
+      <div class="section-header fade-in">
+        <h2 class="section-title">How It Works</h2>
+        <p class="section-subtitle">You save. Your agent learns. Everyone benefits.</p>
+      </div>
+
+      <div class="cards-row">
+        <div class="how-card fade-in">
+          <div class="how-card-icon">&#x1F4E5;</div>
+          <div class="how-card-step">Step 1</div>
+          <h3>Save</h3>
+          <p>Drop a link, video, note. Any format, any source. Just toss it in.</p>
+        </div>
+        <div class="how-card fade-in" style="transition-delay: 0.1s;">
+          <div class="how-card-icon">&#x1F9E0;</div>
+          <div class="how-card-step">Step 2</div>
+          <h3>Learn</h3>
+          <p>Agent grabs titles, tags, text, transcripts. Everything gets indexed automatically.</p>
+        </div>
+        <div class="how-card fade-in" style="transition-delay: 0.2s;">
+          <div class="how-card-icon">&#x2728;</div>
+          <div class="how-card-step">Step 3</div>
+          <h3>Surface</h3>
+          <p>Patterns emerge between items — right action appears exactly when you need it.</p>
+        </div>
+      </div>
+
+      <p class="how-footer fade-in">
+        It's your just-in-time information system, pre-sorted by the past version of you.
+      </p>
+    </div>
+  </section>
+
+  <!-- ─── SECTION 4: TIERS ─────────────────────────────────────────────── -->
+  <section id="tiers">
+    <div class="roots" aria-hidden="true">
+      <div class="root"></div>
+      <div class="root"></div>
+      <div class="root"></div>
+      <div class="root"></div>
+    </div>
+
+    <div class="container" style="padding-top: 56px;">
+      <div class="section-header fade-in">
+        <h2 class="section-title">Start Solo.<br>Grow On Your Own Terms.</h2>
+      </div>
+
+      <div class="tiers-stack">
+        <div class="tier-card fade-in">
+          <div class="tier-label">Just You</div>
+          <h3>Your machine. Your rules.</h3>
+          <p>Install locally. Everything on your machine. No cloud. No subscription. No tokens burned on storage.</p>
+        </div>
+
+        <div class="tier-card fade-in">
+          <div class="tier-label">Ready to Share</div>
+          <h3>Your server. Your circle.</h3>
+          <p>Spin Dugg up on a server you control. Your instance, your rules, your data. Invite friends with a link.</p>
+        </div>
+
+        <div class="tier-card fade-in" style="position: relative;">
+          <div class="tier-label">Ready to Scale</div>
+          <h3>Community-grade digging.</h3>
+          <p>Run topic-focused community instances with moderation, rate limits, and invite accountability built in.</p>
+          <div class="tier-placeholder"><img src="duggley-peeking.png" alt="Duggley the mole peeking at the camera with explorer hat and round glasses" style="width:100%;height:100%;object-fit:cover;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SECTION 5: MCP / TERMINAL ────────────────────────────────────── -->
+  <section id="mcp">
+    <div class="gems" aria-hidden="true">
+      <div class="gem"></div>
+      <div class="gem"></div>
+      <div class="gem"></div>
+      <div class="gem"></div>
+      <div class="gem"></div>
+      <div class="gem"></div>
+    </div>
+
+    <div class="container" style="padding-top: 16px;">
+      <div class="mcp-content">
+        <div class="mcp-text fade-in">
+          <h2>Your Agent Already Speaks The Language</h2>
+          <p>Dugg is an MCP server — the open protocol your AI agent already understands.</p>
+          <p class="stat-line">54 tools. No custom integration. No API wrapper. Connect and go.</p>
+          <div class="mcp-placeholder"><img src="duggley-pointing.jpg" alt="Duggley the mole pointing toward the terminal demo" style="width:100%;height:100%;object-fit:cover;"></div>
+        </div>
+        <div class="terminal fade-in" style="transition-delay: 0.15s;">
+          <div class="terminal-bar">
+            <div class="terminal-dot"></div>
+            <div class="terminal-dot"></div>
+            <div class="terminal-dot"></div>
+          </div>
+          <div class="terminal-body">
+            <div class="cmd">$ dugg search "landing page frameworks"</div>
+            <div class="out">&gt; 3 results across 2 collections</div>
+            <div class="out">&gt; <span class="link">[1]</span> "Claude Code + SeedDance 2.0..."</div>
+            <div class="out">&gt; <span class="link">[2]</span> "How to Build $10k Websites..."</div>
+            <div class="out">&gt; <span class="link">[3]</span> "Nano Banana 2 + FireCrawl..."</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SECTION 6: PRIVACY ───────────────────────────────────────────── -->
+  <section id="privacy">
+    <div class="privacy-inner fade-in">
+      <h2>Privacy Isn't A Feature.<br>It's The Architecture.</h2>
+      <div class="privacy-rule"></div>
+      <p>Everything starts local. Nothing leaves unless you explicitly publish it.</p>
+      <p>No algorithmic feed. No hidden ranking. No wondering why your post disappeared.</p>
+      <p>Open-source software, not a platform. Nobody else touches your data.</p>
+    </div>
+  </section>
+
+  <!-- ─── SECTION 7: FOOTER / CTA ──────────────────────────────────────── -->
+  <footer id="footer">
+    <div class="gems" aria-hidden="true">
+      <div class="gem"></div>
+      <div class="gem"></div>
+      <div class="gem gem-diamond"></div>
+      <div class="gem"></div>
+      <div class="gem"></div>
+      <div class="gem gem-diamond"></div>
+      <div class="gem"></div>
+      <div class="gem"></div>
+    </div>
+
+    <div class="footer-inner fade-in">
+      <div class="footer-mascot-ph"><img src="duggley-gems.png" alt="Duggley the mole sitting on a pile of colorful gems, holding crystals above his head" style="width:100%;height:100%;object-fit:contain;"></div>
+      <h2 class="footer-cta">Open source.<br>MIT licensed.<br><span>Get Dugg in.</span></h2>
+      <p class="footer-stats">
+        <span>134 tests</span> &nbsp;&middot;&nbsp;
+        <span>17 tables</span> &nbsp;&middot;&nbsp;
+        <span>Dual transport</span> &nbsp;&middot;&nbsp;
+        <span>One Python package</span>
+      </p>
+      <a href="https://github.com/kadedworkin/dugg-fyi" class="footer-btn" target="_blank" rel="noopener">
+        View on GitHub &rarr;
+      </a>
+      <p class="footer-sub">
+        dugg.fyi &nbsp;&middot;&nbsp; MIT License &nbsp;&middot;&nbsp; Built by <a href="https://github.com/kadedworkin" target="_blank" rel="noopener">Kade Dworkin</a> with Artemisia, his custom AI Agent
+      </p>
+    </div>
+  </footer>
+
+  <!-- ─── JAVASCRIPT ────────────────────────────────────────────────────── -->
+  <script>
+    // ── IntersectionObserver: fade-in on scroll ─────────────────────────
+    const fadeEls = document.querySelectorAll('.fade-in');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+    fadeEls.forEach(el => observer.observe(el));
+
+    // ── Smooth background color interpolation on scroll ─────────────────
+    // Section anchors: [scrollY, r, g, b]
+    const colorStops = [
+      { y: 0,    r: 92,  g: 148, b: 252 },  // sky
+      { y: 0.18, r: 200, g: 160, b: 96  },  // topsoil
+      { y: 0.35, r: 144, g: 96,  b: 48  },  // mid-earth
+      { y: 0.52, r: 96,  g: 64,  b: 32  },  // deep-earth
+      { y: 0.68, r: 96,  g: 64,  b: 32  },  // deep-earth (MCP)
+      { y: 0.80, r: 74,  g: 48,  b: 32  },  // dark earth (privacy)
+      { y: 1.0,  r: 56,  g: 56,  b: 56  },  // bedrock
+    ];
+
+    function lerpColor(a, b, t) {
+      return {
+        r: Math.round(a.r + (b.r - a.r) * t),
+        g: Math.round(a.g + (b.g - a.g) * t),
+        b: Math.round(a.b + (b.b - a.b) * t),
+      };
+    }
+
+    function getColorAtProgress(p) {
+      // Clamp
+      if (p <= colorStops[0].y) return colorStops[0];
+      if (p >= colorStops[colorStops.length - 1].y) return colorStops[colorStops.length - 1];
+      for (let i = 0; i < colorStops.length - 1; i++) {
+        const a = colorStops[i], b = colorStops[i + 1];
+        if (p >= a.y && p <= b.y) {
+          const t = (p - a.y) / (b.y - a.y);
+          return lerpColor(a, b, t);
+        }
+      }
+      return colorStops[0];
+    }
+
+    let ticking = false;
+    function onScroll() {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const scrollTop = window.scrollY;
+          const docHeight = document.body.scrollHeight - window.innerHeight;
+          const progress = docHeight > 0 ? scrollTop / docHeight : 0;
+          const c = getColorAtProgress(progress);
+          document.body.style.backgroundColor = `rgb(${c.r},${c.g},${c.b})`;
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll(); // Initialize
+  </script>
+
+</body>
+</html>
