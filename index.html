@@ -1046,7 +1046,7 @@
       </div>
 
       <p class="how-footer fade-in">
-        It's your just-in-time information system, pre-sorted by the past version of you.
+        It's your just-in-time information system, pre-sorted by the past version of you and your friends and coworkers.
       </p>
     </div>
   </section>
@@ -1069,19 +1069,19 @@
         <div class="tier-card fade-in">
           <div class="tier-label">Just You</div>
           <h3>Your machine. Your rules.</h3>
-          <p>Install locally. Everything on your machine. No cloud. No subscription. No tokens burned on storage.</p>
+          <p>Install locally. Full CLI, portable <code>/dugg</code> slash command, article extraction. No cloud. No subscription. No tokens burned on storage.</p>
         </div>
 
         <div class="tier-card fade-in">
           <div class="tier-label">Ready to Share</div>
           <h3>Your server. Your circle.</h3>
-          <p>Spin Dugg up on a server you control. Your instance, your rules, your data. Invite friends with a link.</p>
+          <p>Spin Dugg up on a server you control. Send invite links — friends join from a browser, no CLI needed. Everyone gets a read-only feed and Atom/RSS.</p>
         </div>
 
         <div class="tier-card fade-in" style="position: relative;">
           <div class="tier-label">Ready to Scale</div>
           <h3>Community-grade digging.</h3>
-          <p>Run topic-focused community instances with moderation, rate limits, and invite accountability built in.</p>
+          <p>Browser admin panel, Slack slash command, ban cascades, tenure-based rate limits, storage caps, owner succession — governance that scales with trust.</p>
           <div class="tier-placeholder"><img src="duggley-peeking.png" alt="Duggley the mole peeking at the camera with explorer hat and round glasses" style="width:100%;height:100%;object-fit:cover;"></div>
         </div>
       </div>
@@ -1104,7 +1104,7 @@
         <div class="mcp-text fade-in">
           <h2>Your Agent Already Speaks The Language</h2>
           <p>Dugg is an MCP server — the open protocol your AI agent already understands.</p>
-          <p class="stat-line">54 tools. No custom integration. No API wrapper. Connect and go.</p>
+          <p class="stat-line">44+ tools. Slack integration. Browser admin. CLI. Connect and go.</p>
           <div class="mcp-placeholder"><img src="duggley-pointing.jpg" alt="Duggley the mole pointing toward the terminal demo" style="width:100%;height:100%;object-fit:cover;"></div>
         </div>
         <div class="terminal fade-in" style="transition-delay: 0.15s;">
@@ -1114,11 +1114,14 @@
             <div class="terminal-dot"></div>
           </div>
           <div class="terminal-body">
-            <div class="cmd">$ dugg search "landing page frameworks"</div>
+            <div class="cmd">$ dugg https://example.com/article --note "great overview"</div>
+            <div class="out">&gt; Added: "Building with MCP Servers"</div>
+            <div class="out">&gt; Tags: ai, mcp, architecture</div>
+            <div class="out">&nbsp;</div>
+            <div class="cmd">$ dugg search "mcp server patterns"</div>
             <div class="out">&gt; 3 results across 2 collections</div>
-            <div class="out">&gt; <span class="link">[1]</span> "Claude Code + SeedDance 2.0..."</div>
-            <div class="out">&gt; <span class="link">[2]</span> "How to Build $10k Websites..."</div>
-            <div class="out">&gt; <span class="link">[3]</span> "Nano Banana 2 + FireCrawl..."</div>
+            <div class="out">&gt; <span class="link">[1]</span> "Building with MCP Servers"</div>
+            <div class="out">&gt; <span class="link">[2]</span> "MCP Protocol Deep Dive..."</div>
           </div>
         </div>
       </div>
@@ -1130,9 +1133,9 @@
     <div class="privacy-inner fade-in">
       <h2>Privacy Isn't A Feature.<br>It's The Architecture.</h2>
       <div class="privacy-rule"></div>
-      <p>Everything starts local. Nothing leaves unless you explicitly publish it.</p>
-      <p>No algorithmic feed. No hidden ranking. No wondering why your post disappeared.</p>
-      <p>Open-source software, not a platform. Nobody else touches your data.</p>
+      <p>Everything starts local. Nothing leaves unless you explicitly publish it. Graduated read horizons and content indexing policies give you per-instance control.</p>
+      <p>No algorithmic feed. No hidden ranking. Silent reactions — only the publisher sees counts. No social proof pressure.</p>
+      <p>Open-source software, not a platform. IMAP-style storage caps evict old remote content — your own data is never touched.</p>
     </div>
   </section>
 
@@ -1153,10 +1156,11 @@
       <div class="footer-mascot-ph"><img src="duggley-gems.png" alt="Duggley the mole sitting on a pile of colorful gems, holding crystals above his head" style="width:100%;height:100%;object-fit:contain;"></div>
       <h2 class="footer-cta">Open source.<br>MIT licensed.<br><span>Get Dugg in.</span></h2>
       <p class="footer-stats">
-        <span>134 tests</span> &nbsp;&middot;&nbsp;
-        <span>17 tables</span> &nbsp;&middot;&nbsp;
+        <span>136 tests</span> &nbsp;&middot;&nbsp;
+        <span>44+ MCP tools</span> &nbsp;&middot;&nbsp;
+        <span>19 tables</span> &nbsp;&middot;&nbsp;
         <span>Dual transport</span> &nbsp;&middot;&nbsp;
-        <span>One Python package</span>
+        <span>Slack &amp; Browser built in</span>
       </p>
       <a href="https://github.com/kadedworkin/dugg-fyi" class="footer-btn" target="_blank" rel="noopener">
         View on GitHub &rarr;
